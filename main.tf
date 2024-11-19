@@ -18,10 +18,7 @@ locals {
   region          = "ap-south-2"
   name            = "amit-eks-cluster"
   vpc_cidr        = "10.123.0.0/16"
-  azs             = data.aws_availability_zones.available.names
-  private_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
-  public_subnets  = ["10.0.10.0/24", "10.0.20.0/24", "10.0.30.0/24"]
-  intra_subnets   = ["10.0.101.0/24", "10.0.201.0/24", "10.0.301.0/24"]
+  azs             = slice(data.aws_availability_zones.available.names, 0, 3)
   tags = {
     Name = local.name
   }
@@ -35,8 +32,9 @@ module "vpc" {
   cidr = local.vpc_cidr
 
   azs             = local.azs
-  private_subnets = local.private_subnets
-  public_subnets  = local.public_subnets
+  private_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 4, k)]
+  public_subnets  = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 48)]
+  intra_subnets   = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 52)]
 
   enable_nat_gateway = true
   enable_vpn_gateway = true
@@ -66,7 +64,7 @@ module "eks" {
   enable_irsa = true
 
   tags = {
-    cluster = local.tags
+    cluster = "dev"
   }
 
   vpc_id = module.vpc.vpc_id
@@ -117,5 +115,5 @@ resource "aws_security_group_rule" "all_worker_mgmt_egress" {
 }
 
 output "update_kubeconfig_command" {
-  value = format("%s %s %s %s", "aws eks update-kubeconfig --name", module.eks.cluster_id, "--region", local.region)
+  value = format("%s %s %s %s", "aws eks update-kubeconfig --region", local.region, "--name", module.eks.cluster_name)
 }
