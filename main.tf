@@ -12,17 +12,10 @@ terraform {
   }
 }
 
-# Configure the AWS Provider
-provider "aws" {
-  region = "ap-south-2"
-}
-
-data "aws_availability_zones" "available" {
-  #region = local.region
-}
+data "aws_availability_zones" "available" {}
 
 locals {
-  region          = "ap-south-2"
+  region          = "eu-north-1"
   name            = "amit-eks-cluster"
   vpc_cidr        = "10.123.0.0/16"
   azs             = slice(data.aws_availability_zones.available.names, 0, length(data.aws_availability_zones.available.names))
