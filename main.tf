@@ -20,8 +20,8 @@ data "aws_availability_zones" "available" {}
 
 locals {
   region          = "ap-south-2"
-  name            = "amit-eks-cluster"
-  vpc_cidr        = "10.123.0.0/16"
+  name            = "eks-cluster"
+  vpc_cidr        = "10.112.0.0/16"
   azs             = slice(data.aws_availability_zones.available.names, 0, length(data.aws_availability_zones.available.names))
   private_subnets = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 1)]
   public_subnets  = [for k, v in local.azs : cidrsubnet(local.vpc_cidr, 8, k + 4)]

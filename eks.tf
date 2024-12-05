@@ -43,7 +43,8 @@ module "eks" {
       }
     }
   }
-  #enable_cluster_creator_admin_permissions = true
+  
+  enable_cluster_creator_admin_permissions = true
 
   tags = local.tags
 }
