@@ -12,10 +12,14 @@ terraform {
   }
 }
 
+provider "aws" {
+  region = local.region
+}
+
 data "aws_availability_zones" "available" {}
 
 locals {
-  region          = "eu-north-1"
+  region          = "ap-south-2"
   name            = "amit-eks-cluster"
   vpc_cidr        = "10.123.0.0/16"
   azs             = slice(data.aws_availability_zones.available.names, 0, length(data.aws_availability_zones.available.names))
