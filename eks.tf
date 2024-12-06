@@ -2,8 +2,9 @@ module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 20.0"
 
-  cluster_name                   = local.name
-  cluster_endpoint_public_access = true
+  cluster_name                             = local.name
+  cluster_endpoint_public_access           = true
+  enable_cluster_creator_admin_permissions = true
 
   cluster_addons = {
     coredns = {
@@ -43,8 +44,6 @@ module "eks" {
       }
     }
   }
-  
-  enable_cluster_creator_admin_permissions = true
 
   tags = local.tags
 }
