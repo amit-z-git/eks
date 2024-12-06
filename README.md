@@ -27,9 +27,9 @@ This guide walks you through deploying a web application in a Kubernetes cluster
              ports:
              - containerPort: 80
 ```
-***Apply the deployment:***
+**Apply the deployment:**
 
-***Run the following command to deploy your app:***
+**Run the following command to deploy your app:**
 ```sh
 kubectl apply -f app-deployment.yaml
 ```
@@ -52,9 +52,9 @@ spec:
       nodePort: 30001  # Port on the host machine to expose
   type: NodePort
 ```
-***Apply the service:***
+**Apply the service:**
 
-***Run the following command to create the service:***
+**Run the following command to create the service:**
 
 ```sh
 kubectl apply -f app-service.yaml
@@ -70,7 +70,7 @@ docker inspect kind-control-plane | grep "IPAddress"
 
 This will give you the internal IP address of the kind node. However, to access it externally, you may need to configure port forwarding or use a public IP.
 
-***Port Forwarding (if running on localhost):***
+**Port Forwarding (if running on localhost):**
 
 If you are running cluster locally, you can use port forwarding to expose the service to your local machine:
 
